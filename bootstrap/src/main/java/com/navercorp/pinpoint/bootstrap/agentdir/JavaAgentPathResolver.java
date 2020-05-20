@@ -48,11 +48,14 @@ public class JavaAgentPathResolver {
     private static AgentPathFinder[] newAgentPathFinder() {
         AgentPathFinder classAgentPath = new ClassAgentPathFinder();
         AgentPathFinder inputArgumentAgentPath = new InputArgumentAgentPathFinder();
-        return new AgentPathFinder[] {classAgentPath, inputArgumentAgentPath};
+        return new AgentPathFinder[] {classAgentPath, inputArgumentAgentPath}; // 赋值给当前类的agentPathFinders属性
     }
 
     public String resolveJavaAgentPath() {
+        // AgentPathFinder[] 中有两个对象，分别是ClassAgentPathFinder和InputArgumentAgentPathFinder
+        // 在当前类的newAgentPathFinder()方法中进行的赋值
         for (AgentPathFinder agentPath : agentPathFinders) {
+            // ClassAgentPathFinder的getPath()方法用来获取当前jar包bootstrap.jar的路径
             final String path = agentPath.getPath();
             if (path != null) {
                 return path;
@@ -112,6 +115,7 @@ public class JavaAgentPathResolver {
 
     }
 
+    // 去掉-javaagent:xxx.jarxxxx的前缀。即截取掉-javaagent:，返回后面的内容
     @Deprecated
     static class InputArgumentAgentPathFinder implements AgentPathFinder {
 
@@ -123,10 +127,10 @@ public class JavaAgentPathResolver {
 
         @Override
         public String getPath() {
-            final List<String> inputArguments = getInputArguments();
+            final List<String> inputArguments = getInputArguments(); // 获取java虚拟机中管理的所有MBean
             for (String inputArgument : inputArguments) {
-                if (isPinpointAgent(inputArgument, DEFAULT_AGENT_PATTERN)) {
-                    String agentPath = removeJavaAgentPrefix(inputArgument);
+                if (isPinpointAgent(inputArgument, DEFAULT_AGENT_PATTERN)) { // 判断是否是-javaagent参数引入的
+                    String agentPath = removeJavaAgentPrefix(inputArgument); // 去掉前缀
                     logger.info("agentPath:" + agentPath);
                     return agentPath;
                 }

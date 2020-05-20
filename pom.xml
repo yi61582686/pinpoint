@@ -73,7 +73,7 @@
     <properties>
         <encoding>UTF-8</encoding>
         <jdk.version>1.6</jdk.version>
-        <jdk.home>${env.JAVA_6_HOME}</jdk.home>
+        <jdk.home>${env.JAVA_HOME}</jdk.home>
         <test.jdk.home>${jdk.home}</test.jdk.home>
 
         <!-- hbase -->

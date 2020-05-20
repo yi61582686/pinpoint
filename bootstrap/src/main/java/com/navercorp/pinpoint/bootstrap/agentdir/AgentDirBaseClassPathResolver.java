@@ -55,7 +55,7 @@ public class AgentDirBaseClassPathResolver implements ClassPathResolver {
 
     public AgentDirBaseClassPathResolver(String classPath) {
         this.classPath = Assert.requireNonNull(classPath, "classPath");
-        this.fileExtensions = getFileExtensions();
+        this.fileExtensions = getFileExtensions(); // 获取到支持的文件扩展名：{".jar", ".xml", ".properties"}
     }
 
     private static String[] getFileExtensions() {

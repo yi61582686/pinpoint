@@ -50,6 +50,9 @@ public class PinpointBootStrap {
         logger.info("ContextClassLoader:" + Thread.currentThread().getContextClassLoader());
 
         final JavaAgentPathResolver javaAgentPathResolver = JavaAgentPathResolver.newJavaAgentPathResolver();
+        // agentPath有两种可能结果:
+        // 1. -javaagent:......的所有内容
+        // 2. -javageent:...中去掉前缀-javaagent:
         final String agentPath = javaAgentPathResolver.resolveJavaAgentPath();
         logger.info("JavaAgentPath:" + agentPath);
         if (agentPath == null) {
@@ -62,10 +65,11 @@ public class PinpointBootStrap {
             return;
         }
 
-        final Map<String, String> agentArgsMap = argsToMap(agentArgs);
+        final Map<String, String> agentArgsMap = argsToMap(agentArgs); // 将-javaagent:xxx中的参数转换为Map对象
 
+        // 构建pinpoint的类解析器
         final ClassPathResolver classPathResolver = new AgentDirBaseClassPathResolver(agentPath);
-
+        //
         final AgentDirectory agentDirectory = resolveAgentDir(classPathResolver);
         if (agentDirectory == null) {
             logger.warn("Agent Directory Verify fail. skipping agent loading.");
